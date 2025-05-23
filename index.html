@@ -1,57 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form Animation CSS </title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login Only</title>
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  body {
+    background: #111;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background: #222;
+    padding: 30px;
+    border-radius: 10px;
+    width: 320px;
+    box-shadow: 0 0 15px #00f7ff33;
+  }
+  h2 {
+    text-align: center;
+    color: #00f7ff;
+  }
+  .input-box {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .input-box label {
+    margin-bottom: 5px;
+  }
+  .input-box input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #00f7ff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #111;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  #message {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .error {
+    color: #f00;
+  }
+  .success {
+    color: #0f0;
+  }
+</style>
 </head>
-
 <body>
-
-    <div class="login-light"></div>
-    <div class="login-box">
-        <form action="#">
-            <input type="checkbox" class="input-check" id="input-check">
-            <label for="input-check" class="toggle">
-                <span class="text off">off</span>
-                <span class="text on">on</span>
-            </label>
-            <div class="light"></div>
-
-            <h2>Login</h2>
-            <div class="input-box">
-                <span class="icon">
-                    <ion-icon name="mail"></ion-icon>
-                </span>
-                <input type="email" required>
-                <label>Email</label>
-                <div class="input-line"></div>
-            </div>
-            <div class="input-box">
-                <span class="icon">
-                    <ion-icon name="lock-closed"></ion-icon>
-                </span>
-                <input type="password" required>
-                <label>Password</label>
-                <div class="input-line"></div>
-            </div>
-            <div class="remember-forgot">
-                <label><input type="checkbox"> Remember me</label>
-                <a href="#">Forgot Password?</a>
-            </div>
-            <button type="submit">Login</button>
-            <div class="register-link">
-                <p>Don't have an account? <a href="#">Register</a></p>
-            </div>
-        </form>
+  <div class="container">
+    <h2>Login</h2>
+    <div class="input-box">
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
     </div>
+    <div class="input-box">
+      <label for="password">Password</label>
+      <input type="password" id="password" required disabled />
+    </div>
+    <button id="login-btn">Login</button>
+    <div id="message"></div>
+  </div>
 
+  <script>
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+    const messageDiv = document.getElementById("message");
 
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    // Enable password input only after valid email is entered
+    emailInput.addEventListener("input", () => {
+      const email = emailInput.value.trim();
+      const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      passwordInput.disabled = !emailIsValid;
+      messageDiv.textContent = "";
+      messageDiv.className = "";
+    });
+
+    function validatePassword(pwd) {
+      const hasLower = /[a-z]/.test(pwd);
+      const hasUpper = /[A-Z]/.test(pwd);
+      const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
+      const hasLength = pwd.length >= 8;
+      return hasLower && hasUpper && hasSpecial && hasLength;
+    }
+
+    loginBtn.addEventListener("click", () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      messageDiv.className = "";
+      messageDiv.textContent = "";
+
+      if (!email) {
+        messageDiv.className = "error";
+        messageDiv.textContent = "Please enter your email.";
+        return;
+      }
+
+      if (!password) {
+        messageDiv.className = "error";
+        messageDiv.textContent = "Please enter your password.";
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        messageDiv.className = "error";
+        messageDiv.textContent = "Password must be at least 8 characters, include uppercase, lowercase, and special character.";
+        return;
+      }
+
+      messageDiv.className = "success";
+      messageDiv.textContent = "Login successful!";
+    });
+  </script>
 </body>
-
 </html>
